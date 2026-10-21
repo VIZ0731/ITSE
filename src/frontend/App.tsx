@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
+
+const mockSubmitBooking = async (payload: any) => {
+  console.log('Sending POST /api/bookings', payload);
+  return new Promise((resolve) => setTimeout(() => resolve({ status: 201 }), 1000));
+};
+
 export default function BookingForm() {
   const [roomId, setRoomId] = useState('room-a101');
   const [startsAt, setStartsAt] = useState('');
   const [endsAt, setEndsAt] = useState('');
+  const [isPending, setIsPending] = useState(false); // 新增
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsPending(true);
+    await mockSubmitBooking({ roomId, startsAt, endsAt });
+    alert('Booking Confirmed!');
+    setIsPending(false);
+  };
 
   return (
     <div className="booking-form-container">
       <h2>Book a Campus Room</h2>
-      <form>
-        <div>
-          <label>Room ID:</label>
-          <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
-            <option value="room-a101">Room A101 (Capacity 10)</option>
-            <option value="room-b202">Room B202 (Capacity 20)</option>
-          </select>
-        </div>
-        
-        <div>
-          <label>Start Time:</label>
-          <input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} />
-        </div>
-
-        <div>
-          <label>End Time:</label>
-          <input type="datetime-local" value={endsAt} onChange={(e) => setEndsAt(e.target.value)} />
-        </div>
-
-        <button type="submit">Confirm Booking</button>
+      <form onSubmit={handleSubmit}>
+        {}
+        <button type="submit" disabled={isPending}>
+          {isPending ? 'Submitting...' : 'Confirm Booking'}
+        </button>
       </form>
     </div>
   );
