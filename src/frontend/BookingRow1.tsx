@@ -17,7 +17,7 @@ export default function BookingRow({ id, roomId, startsAt, status, onCancel }: B
         <strong>{roomId}</strong> - {osloTime} - Status: <span style={{ color: status === 'active' ? 'green' : 'red' }}>{status}</span>
       </div>
       {status === 'active' && (
-        <button onClick={() => onCancel(id)} style={{ color: 'red' }}>Cancel</button>
+        <button onClick={() => onCancel(id)} style={{ color: 'red' }} title="Cancel this booking and free up the time slot" >Cancel</button>
       )}
     </div>
   );
