@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-
+interface BookingFormData {
+  roomId: string;
+  startsAt: string;
+  endsAt: string;
+}
 const mockSubmitBooking = async (payload: any) => {
   console.log('Sending POST /api/bookings', payload);
   return new Promise((resolve) => setTimeout(() => resolve({ status: 201 }), 1000));
