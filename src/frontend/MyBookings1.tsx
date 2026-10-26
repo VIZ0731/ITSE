@@ -15,6 +15,8 @@ export default function MyBookings() {
   }, []);
 
   const handleCancel = (id: string) => {
+    // Safety check: ensure the booking ID is valid before proceeding
+    if (!id) return; 
     const isConfirmed = window.confirm("Are you sure you want to cancel this booking?");
     if (isConfirmed) {
       // Mock API call to PATCH /api/bookings/{id}/cancel
