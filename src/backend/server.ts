@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
-
+// WANG-16 Optimization: Extract hardcoded port to a constant for easier configuration
+const DEFAULT_PORT = 3000; 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || DEFAULT_PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
