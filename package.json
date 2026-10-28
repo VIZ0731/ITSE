@@ -1,0 +1,20 @@
+{
+  "name": "campus-rooms-booking-system",
+  "version": "1.0.0",
+  "description": "Campus Rooms Booking System for SE course",
+  "main": "src/backend/server.ts",
+  "scripts": {
+    "dev": "ts-node-dev src/backend/server.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "ts-node prisma/seed.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
