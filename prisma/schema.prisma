@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id       String    @id @default(uuid())
+  name     String
+  capacity Int
+  isActive Boolean   @default(true)
+  bookings Booking[]
+}
+
+model Student {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  fullName String
+  bookings Booking[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  roomId    String
+  studentId String
+  startsAt  DateTime
+  endsAt    DateTime
+  status    String   @default("active") // "active" or "cancelled"
+  createdAt DateTime @default(now())
+  
+  room      Room     @relation(fields: [roomId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  @@index([roomId, startsAt, endsAt])
+}generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id       String    @id @default(uuid())
+  name     String
+  capacity Int
+  isActive Boolean   @default(true)
+  bookings Booking[]
+}
+
+model Student {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  fullName String
+  bookings Booking[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  roomId    String
+  studentId String
+  startsAt  DateTime
+  endsAt    DateTime
+  status    String   @default("active") // "active" or "cancelled"
+  createdAt DateTime @default(now())
+  
+  room      Room     @relation(fields: [roomId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  @@index([roomId, startsAt, endsAt])
+}
