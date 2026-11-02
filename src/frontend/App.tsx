@@ -1,37 +1,45 @@
-import React, { useState } from 'react';
-interface BookingFormData {
-  roomId: string;
-  startsAt: string;
-  endsAt: string;
-}
-const mockSubmitBooking = async (payload: any) => {
-  console.log('Sending POST /api/bookings', payload);
-  return new Promise((resolve) => setTimeout(() => resolve({ status: 201 }), 1000));
-};
+import React, { useState, useEffect } from 'react';
 
-export default function BookingForm() {
-  const [roomId, setRoomId] = useState('room-a101');
-  const [startsAt, setStartsAt] = useState('');
-  const [endsAt, setEndsAt] = useState('');
-  const [isPending, setIsPending] = useState(false); // 新增
+export default function App() {
+  const [rooms, setRooms] = useState([]);
+  const [error, setError] = useState('');
+  const [isPending, setIsPending] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetch('/api/rooms').then(res => res.json()).then(data => setRooms(data));
+  }, []);
+
+  const handleBook = async (roomId: string) => {
     setIsPending(true);
-    await mockSubmitBooking({ roomId, startsAt, endsAt });
-    alert('Booking Confirmed!');
-    setIsPending(false);
+    setError('');
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roomId, startsAt: '2026-11-10T10:00:00Z', endsAt: '2026-11-10T11:00:00Z' })
+      });
+      if (res.status === 409) {
+        setError('This room is no longer available.');
+      } else if (res.status === 201) {
+        alert('Booking confirmed!');
+      }
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
-    <div className="booking-form-container">
-      <h2>Book a Campus Room</h2>
-      <form onSubmit={handleSubmit}>
-        {}
-        <button type="submit" disabled={isPending}>
-          {isPending ? 'Submitting...' : 'Confirm Booking'}
-        </button>
-      </form>
+    <div>
+      <h1>Campus Rooms</h1>
+      {error && <div style={{ color: 'red', border: '1px solid red' }} role="alert">{error}</div>}
+      <ul>
+        {rooms.map((r: any) => (
+          <li key={r.id}>
+            {r.name} (Capacity: {r.capacity})
+            <button disabled={isPending} onClick={() => handleBook(r.id)}>Book</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
